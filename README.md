@@ -1,5 +1,8 @@
 # Hiragana Game
+## Introduction
 A very simple Python-based game for testing your hiragana knowledge.
+
+This project was written in Python 3.7.3.
 
 ## Principle
 The ```game.py``` script loads the ```hiragana.csv``` file and populates a ```dict``` object with the letters and their sounds, as specified in the CSV file.
@@ -23,4 +26,4 @@ Then, activate the environment:
 $ source ./bin/activate
 ```
 
-Then you can ```pip install requirements.txt``` as normal to install the dependencies.
+Then you can ```pip3 install -r requirements.txt``` as normal to install the dependencies.
