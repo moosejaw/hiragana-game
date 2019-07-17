@@ -1,6 +1,9 @@
 # Hiragana Game
 ## Introduction
-A very simple Python-based game for testing your hiragana knowledge.
+A very simple terminal-based Python game for testing your hiragana knowledge. It is currently unfinished.
+
+### Important Note
+```hiragana.csv``` contains the mapping of each hiragana letter to its given pronunciation, but it does not yet contain the complete alphabet. You can populate it further manually if you want to.
 
 This project was written in Python 3.7.3.
 
@@ -26,4 +29,11 @@ Then, activate the environment:
 $ source ./bin/activate
 ```
 
-Then you can ```pip3 install -r requirements.txt``` as normal to install the dependencies.
+Then you can run:
+```bash
+pip install -r requirements.txt
+```
+as normal to install the dependencies.
+
+## Future improvements
+I'm writing the code for this as I explore my learning of Japanese further. Therefore, I'll probably add katakana once I start trying to learn it.
