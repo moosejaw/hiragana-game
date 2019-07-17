@@ -2,7 +2,6 @@ import csv
 import pprint
 import random
 import colorama
-from sys import exit
 
 class Color:
     """Class containing some common methods used for colorama."""
