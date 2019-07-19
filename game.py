@@ -110,10 +110,13 @@ if __name__ == '__main__':
         game.printMainMenu()
         selection = input('Please select an option: ')
 
-        if selection == '1':
-            game.playGame()
-        elif selection == '2':
-            game.printLetters()
-        elif selection == '3':
+        menuOptions = {
+            '1': game.playGame,
+            '2': game.printLetters,
+        }
+
+        if selection == '3':
             # Quit the game
             gameIsActive = False
+        else:
+            menuOptions.get(selection)() if menuOptions.get(selection) else None
