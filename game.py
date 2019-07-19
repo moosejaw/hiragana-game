@@ -1,7 +1,7 @@
 import csv
-import pprint
 import random
 import colorama
+
 
 class Color:
     """Class containing some common methods used for colorama."""
@@ -16,6 +16,9 @@ class Color:
 
     def setGreenText(self):
         print(colorama.Fore.GREEN)
+
+    def setBlueText(self):
+        print(colorama.Fore.BLUE)
 
 
 class Game:
@@ -38,7 +41,7 @@ class Game:
         if not self.letters:
             print('The letters dictionary is empty. Check the file \
             and try again.')
-            raise Error
+            raise Exception # Raise a generic exception for now
 
     def getAppraisal(self, score):
         if score == 0:
@@ -52,7 +55,7 @@ class Game:
 
     def printMainMenu(self):
         print(
-        '''Welcome to the Japanese Hiragana game!
+        '''Welcome to the hiragana game!
 
         Please select an option:
             1. Play the game
@@ -61,6 +64,7 @@ class Game:
         ''')
 
     def printLetters(self):
+        self.printEmptyLines(1)
         print('The letters and their sounds are as follows:')
         for k, v in self.letters.items():
             print(f'{k} : {v}')
