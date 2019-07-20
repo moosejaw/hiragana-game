@@ -63,6 +63,35 @@ class Game:
             3. Exit
         ''')
 
+    def getRandomLetter(self):
+        # Quickly cast the letters dict into a list and pick a random one
+        return random.choice(list(self.letters.keys()))
+
+    def getSoundAnswerChoices(self, letter):
+        """Gets the correct answer plus a couple others
+        and puts them into a list."""
+        answers = [letter]
+        for i in range(3):
+            rand = self.getRandomLetter()
+            if rand not in answers:
+                answers.append(rand)
+            else:
+                i -= 1
+                continue
+        random.shuffle(answers)
+        return answers
+
+    def printGameMenu(self):
+        self.printEmptyLines(1)
+        print(
+        '''What type of game do you want to play?
+
+        Please select an option:
+            1. Ask me the letters, and I'll tell you the sound!
+            2. Ask me the sound and I'll choose the letter!
+            3. Go back
+        ''')
+
     def printLetters(self):
         self.printEmptyLines(1)
         print('The letters and their sounds are as follows:')
@@ -70,15 +99,29 @@ class Game:
             print(f'{k} : {v}')
         self.printEmptyLines(1)
 
+    def printWrongSoundAnswer(self, answer):
+        self.color.setRedText()
+        print(f'That\'s incorrect. The correct answer is: {answer}.')
+        self.color.reset()
+        self.printEmptyLines(1)
+
     def printEmptyLines(self, numberOfLines):
         for i in range(numberOfLines):
             print('\n')
 
-    def playGame(self):
+    def getGameSelection(self):
+        self.printGameMenu()
+        selection = input('Please select an option: ')
+        menuOptions = {
+            '1': self.playLettersGame,
+            '2': self.playSoundsGame
+        }
+        menuOptions.get(selection)() if menuOptions.get(selection) else None
+
+    def playLettersGame(self):
         correctAnswers = 0
         for i in range(10):
-            # Quickly cast the keys to subscriptable list
-            selectedLetter = random.choice(list(self.letters.keys()))
+            selectedLetter = self.getRandomLetter()
 
             # Ask the question
             print(f'What is the sound of the letter: {selectedLetter}?')
@@ -101,17 +144,48 @@ class Game:
         appraisal = self.getAppraisal(correctAnswers)
         print(f'You scored {correctAnswers} out of 10. {appraisal}')
 
+    def playSoundsGame(self):
+        correctAnswers = 0
+        for i in range(10):
+            selectedLetter = self.getRandomLetter()
+            choices = self.getSoundAnswerChoices(selectedLetter)
+
+            # Ask the question
+            print(f'What letter corresponds to the sound: \'{self.letters[selectedLetter]}\'?')
+            for a in range(len(choices)):
+                print(f'{a+1}: {choices[a]}')
+            playerAnswer = input('Your answer: ')
+
+            # Get the answer and determine if it's right or wrong
+            if playerAnswer.isnumeric():
+                if int(playerAnswer) > 0:
+                    if choices[int(playerAnswer) - 1] == selectedLetter:
+                        self.color.setGreenText()
+                        print('That\'s correct! Well done!')
+                        self.color.reset()
+                        correctAnswers += 1
+                    else:
+                        self.printWrongSoundAnswer(selectedLetter)
+                else:
+                    self.printWrongSoundAnswer(selectedLetter)
+            else:
+                self.printWrongSoundAnswer(selectedLetter)
+
+        # Appraise the player's score!
+        appraisal = self.getAppraisal(correctAnswers)
+        print(f'You scored {correctAnswers} out of 10! {appraisal}')
 
 # Main code
 if __name__ == '__main__':
     gameIsActive = True
     while gameIsActive:
         game = Game()
+        game.printEmptyLines(1)
         game.printMainMenu()
         selection = input('Please select an option: ')
 
         menuOptions = {
-            '1': game.playGame,
+            '1': game.getGameSelection,
             '2': game.printLetters,
         }
 
