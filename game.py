@@ -157,17 +157,18 @@ class Game:
             playerAnswer = input('Your answer: ')
 
             # Get the answer and determine if it's right or wrong
+            answerIsCorrect = False
             if playerAnswer.isnumeric():
                 if int(playerAnswer) > 0:
                     if choices[int(playerAnswer) - 1] == selectedLetter:
-                        self.color.setGreenText()
-                        print('That\'s correct! Well done!')
-                        self.color.reset()
-                        correctAnswers += 1
-                    else:
-                        self.printWrongSoundAnswer(selectedLetter)
-                else:
-                    self.printWrongSoundAnswer(selectedLetter)
+                        answerIsCorrect = True
+
+            # Tell the player
+            if answerIsCorrect:
+                self.color.setGreenText()
+                print('That\'s correct! Well done!')
+                self.color.reset()
+                correctAnswers += 1
             else:
                 self.printWrongSoundAnswer(selectedLetter)
 
