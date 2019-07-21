@@ -99,6 +99,7 @@ class Game:
         options = [v for k, v in self.rows.items()]
         options = list(set(options))
 
+        self.printEmptyLines(1)
         print('What sounds of the letters do you want to include in questions?')
         print('\t0: All sounds')
         for sound in range(len(options)):
@@ -193,7 +194,14 @@ class Game:
         print(f'You scored {correctAnswers} out of 10. {appraisal}')
 
     def playSoundsGame(self):
-        # TODO: Ask the player what sounds they want to include in this game
+        # Ask the players what rows they want to include
+        self.selectedRows = []
+        while not self.selectedRows:
+            rowsToInclude = self.getRowsToInclude()
+            if rowsToInclude:
+                self.selectedRows = rowsToInclude
+
+        # Start the game
         correctAnswers = 0
         for i in range(10):
             selectedLetter = self.getRandomLetter()
@@ -225,7 +233,7 @@ class Game:
         appraisal = self.getAppraisal(correctAnswers)
         print(f'You scored {correctAnswers} out of 10! {appraisal}')
 
-# Main code
+
 if __name__ == '__main__':
     gameIsActive = True
     while gameIsActive:
