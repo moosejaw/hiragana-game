@@ -193,6 +193,7 @@ class Game:
         print(f'You scored {correctAnswers} out of 10. {appraisal}')
 
     def playSoundsGame(self):
+        # TODO: Ask the player what sounds they want to include in this game
         correctAnswers = 0
         for i in range(10):
             selectedLetter = self.getRandomLetter()
