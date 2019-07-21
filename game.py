@@ -23,16 +23,19 @@ class Color:
 
 class Game:
     """Class containing all the game methods and the letters dictionary."""
-    letters = {}
-    color = Color()
+    letters      = {}
+    rows         = {}
+    selectedRows = []
+    color        = Color()
 
     def __init__(self):
         # Load the letters
         try:
             with open('hiragana.csv', 'r') as lettersFile:
-                reader = csv.DictReader(lettersFile)
+                reader = csv.reader(lettersFile)
                 for line in reader:
-                    self.letters[line['letter']] = line['sound']
+                    self.letters[line[0]] = line[1]
+                    self.rows[line[0]] = line[2]
         except FileNotFoundError as e:
             print('The letters file could not be loaded.')
             raise FileNotFoundError
@@ -42,6 +45,10 @@ class Game:
             print('The letters dictionary is empty. Check the file \
             and try again.')
             raise Exception # Raise a generic exception for now
+        elif not self.rows:
+            print('The sounds (rows) dictionary is empty. Check the file \
+            and try again.')
+            raise Exception
 
     def getAppraisal(self, score):
         if score == 0:
@@ -67,19 +74,49 @@ class Game:
         # Quickly cast the letters dict into a list and pick a random one
         return random.choice(list(self.letters.keys()))
 
+    def letterIsValid(self, letter):
+        # Check to see if the letter is in the selected rows
+        return self.rows[letter] in self.selectedRows
+
     def getSoundAnswerChoices(self, letter):
         """Gets the correct answer plus a couple others
         and puts them into a list."""
         answers = [letter]
-        for i in range(3):
+        while len(answers) < 4:
             rand = self.getRandomLetter()
             if rand not in answers:
                 answers.append(rand)
-            else:
-                i -= 1
-                continue
         random.shuffle(answers)
         return answers
+
+    def getRowsToInclude(self):
+        """Asks the player for the 'rows' of letters
+        they want to use in the game."""
+        # Set return object
+        rowsSelected = []
+
+        # Quickly get the row choices
+        options = [v for k, v in self.rows.items()]
+        options = list(set(options))
+
+        print('What sounds of the letters do you want to include in questions?')
+        print('\t0: All sounds')
+        for sound in range(len(options)):
+            print(f'\t{sound+1}: -{options[sound]} sounds')
+        print('Seperate your choices with a space.')
+        self.printEmptyLines(1)
+        selection = input('Your choices: ')
+
+        # Quick input validation
+        if selection.replace(' ', '').isnumeric():
+            if selection == '0':
+                rowsSelected = list(options)
+            else:
+                selection = selection.split(' ')
+                for sound in selection:
+                    if int(sound)-1 < len(options):
+                        rowsSelected.append(options[int(sound)-1])
+        return rowsSelected
 
     def printGameMenu(self):
         self.printEmptyLines(1)
@@ -119,9 +156,20 @@ class Game:
         menuOptions.get(selection)() if menuOptions.get(selection) else None
 
     def playLettersGame(self):
+        # Get which rows the player wants to use
+        self.selectedRows = []
+        while not self.selectedRows:
+            rowsToInclude = self.getRowsToInclude()
+            if rowsToInclude:
+                self.selectedRows = rowsToInclude
+
+        # Start the game, ask the questions
         correctAnswers = 0
         for i in range(10):
-            selectedLetter = self.getRandomLetter()
+            validLetter = False
+            while not validLetter:
+                selectedLetter = self.getRandomLetter()
+                validLetter = self.letterIsValid(selectedLetter)
 
             # Ask the question
             print(f'What is the sound of the letter: {selectedLetter}?')
