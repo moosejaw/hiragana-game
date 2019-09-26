@@ -4,6 +4,8 @@ A very simple terminal-based Python game for testing your hiragana knowledge. It
 
 This project was written in Python 3.7.3.
 
+You should ensure that the OS you're running the game on can support the display of Japanese characters.
+
 ### Important Note
 ```hiragana.csv``` contains the mapping of each hiragana letter to its given sound, but it does not yet contain the complete alphabet. You can populate it further manually if you want to.
 
