@@ -29,5 +29,5 @@ pip install -r requirements.txt
 ```
 as normal to install the dependencies.
 
-## Future improvements
-I'm writing the code for this as I explore my learning of the Japanese language further. Therefore, I'll probably add katakana once I start trying to learn it.
+
+
